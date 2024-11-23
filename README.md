@@ -77,7 +77,13 @@ Design and development of a simplified version of a data integration framework f
 
 - Node.js
 
-- Json data.
+- Javascript.
+
+- Kafka
+
+- MongoDB
+
+
 
 
 ### Data models gotten from this endpoint:
