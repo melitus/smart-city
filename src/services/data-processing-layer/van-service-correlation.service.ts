@@ -1,5 +1,5 @@
 import { calculateDelayInMinutes } from "../../utils";
-import { BusLocationSchema,PassengerWaitingDataSchema, VanRequest } from "../../models";
+import { BusLocationSchema,PassengerWaitingDataSchema, VanLocationSchema, VanRequest } from "../../models";
 import { saveActionableInsight } from "../data-storage-layer";
 import { InsightType } from "../../models/actionableInsight.model";
 
@@ -38,6 +38,7 @@ export const exceedsPassengerThreshold = (
  * @param averagePassengers - Average number of passengers for the location
  */
 export const processVanDispatchDecision = (
+  vanData: VanLocationSchema[],
   busData: BusLocationSchema[],
   passengerData: PassengerWaitingDataSchema[],
   averagePassengers: number

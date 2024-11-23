@@ -9,27 +9,6 @@ import {
 import { createTopics } from "../topics";
 import { connectMongoWithRetry } from "../../../utils/datastore";
 
-
-
-// export const registerAllConsumersListeners = async () => {
-//   // create topics if they don't exist
-//   await createTopics()
-//   console.log('Registering all kafka consumer listeners');
-//   try {
-//     // Register the listeners to their respective topics
-//     await Promise.all([
-//       onNewVanLocationDataConsumerListener(),
-//       onNewWeatherUpdatesListener(),
-//       onNewPassengerWaitingDataListener(),
-//       onNewBusLocationDataListener(),
-
-//     ]);
-//   } catch (error) {
-//     console.error('Error registering consumers', error);
-//   }
-// };
-
-
 export const registerAllConsumersListeners = async () => {
   // create topics if they don't exist
   await connectMongoWithRetry()
@@ -37,6 +16,7 @@ export const registerAllConsumersListeners = async () => {
   console.log('Registering all Kafka consumer listeners');
   
   // Create state to hold incoming data
+  let currentVanData: any = null;
   let currentBusData: any = null;
   let currentPassengerData: any = null;
   let currentWeatherData: any = null;
@@ -46,11 +26,7 @@ export const registerAllConsumersListeners = async () => {
     // Register the listeners to their respective topics
     await Promise.all([
       onNewVanLocationDataConsumerListener((data) => {
-        currentBusData = data; // Save incoming bus data
-        // Call process when both bus and passenger data are available
-        if (currentBusData && currentPassengerData && averagePassengers !== null) {
-          processVanDispatchDecision(currentBusData, currentPassengerData, averagePassengers);
-        }
+        currentVanData = data; // Save incoming van data
       }),
 
       onNewWeatherUpdatesListener((data) => {
@@ -70,10 +46,10 @@ export const registerAllConsumersListeners = async () => {
         console.log({averagePassengers})
         console.log({currentBusData, currentPassengerData, averagePassengers})
         // Call process when both bus and passenger data are available
-        if (currentBusData && currentPassengerData && averagePassengers !== null) {
+        if (currentVanData && currentBusData && currentPassengerData && averagePassengers !== null) {
           console.log("Processing bus and passenger data on new passenger")
 
-          processVanDispatchDecision(currentBusData, currentPassengerData, averagePassengers);
+          processVanDispatchDecision(currentVanData, currentBusData, currentPassengerData, averagePassengers);
         }
         
       }),
@@ -81,9 +57,9 @@ export const registerAllConsumersListeners = async () => {
       onNewBusLocationDataListener((data) => {
         currentBusData = data; // Save incoming bus data
         // Call process when both bus and passenger data are available
-        if (currentBusData && currentPassengerData && averagePassengers !== null) {
+        if (currentVanData && currentBusData && currentPassengerData && averagePassengers !== null) {
           console.log("Processing bus and passenger data on new bus data")
-          processVanDispatchDecision(currentBusData, currentPassengerData, averagePassengers);
+          processVanDispatchDecision(currentVanData, currentBusData, currentPassengerData, averagePassengers);
         }
       })
     ]);
