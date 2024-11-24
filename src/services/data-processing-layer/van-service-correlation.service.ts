@@ -10,7 +10,15 @@ const PASSENGER_THRESHOLD_FACTOR = 0.5; // Dispatch a van if more than 50% passe
 const VAN_PICKUP_RADIUS = 10; // Van pickup radius in kilometers
 
 
-// Adjust tolerance using a distance threshold in kilometers
+
+/**
+ * Checks if two points are within a specified distance.
+ * @param lat1 - Latitude of the first point
+ * @param lon1 - Longitude of the first point
+ * @param lat2 - Latitude of the second point
+ * @param lon2 - Longitude of the second point
+ * @param maxDistance - Maximum distance in kilometers
+ */
 const isWithinDistance = (lat1: number, lon1: number, lat2: number, lon2: number, maxDistance: number = VAN_PICKUP_RADIUS): boolean => {
   const distance = haversineDistance(lat1, lon1, lat2, lon2);
   console.log({distance})
@@ -55,6 +63,9 @@ export const processVanDispatchDecision = (
   console.log('Processing Van Dispatch Decision');
   console.log({ vanData, busData, passengerData, averagePassengers });
 
+   // Maintain a set of assigned van IDs
+   const assignedVans = new Set<string>();
+   
   passengerData.forEach((passenger) => {
     console.log('Checking passenger at:', passenger.lat, passenger.lon);
 
@@ -72,10 +83,16 @@ export const processVanDispatchDecision = (
       exceedsPassengerThreshold(passenger.passengers, averagePassengers)
     ) {
       // Iterate through all vans to find the closest one within the distance
-      for (const van of vanData) {
-        if (isWithinDistance(van.lat, van.lon, passenger.lat, passenger.lon)) {
+       // Iterate through all vans to find the closest unassigned one within the distance
+       for (const van of vanData) {
+        if (
+          isWithinDistance(van.lat, van.lon, passenger.lat, passenger.lon) &&
+          !assignedVans.has(van.van_id)
+        ) {
           console.log('Available Van:', van);
-
+          
+          // Mark the van as assigned
+          assignedVans.add(van.van_id);
           // Create a van request with the current van's ID
           const vanRequest: VanRequest = {
             vehicleId: van.van_id, // Dynamically update with the current van ID
