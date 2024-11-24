@@ -6,6 +6,7 @@ export interface VanLocationSchema {
   }
   
   export interface VanRequest {
+    vehicleId: string;
     location: string;
     passengers: number;
     reason: string;

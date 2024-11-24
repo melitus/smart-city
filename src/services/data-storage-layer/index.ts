@@ -5,7 +5,6 @@ import ActionableInsightModel, { ActionableInsight, InsightType } from "../../mo
  * @param insight - Actionable insight data
  */
 export const saveActionableInsight = async (insight: Partial<ActionableInsight>): Promise<void> => {
-  console.log({saveActionableInsight: insight});
   try {
     const actionableInsight = new ActionableInsightModel(insight);
     await actionableInsight.save();

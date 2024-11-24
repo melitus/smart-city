@@ -4,6 +4,7 @@
  * @param timestamp - ISO 8601 string representing the timestamp of the event
  */
 export const calculateDelayInMinutes = (timestamp: string): number => {
+  console.log({timestamp})
   const eventTime = new Date(timestamp).getTime();
   const currentTime = Date.now();
   return (currentTime - eventTime) / 60000; // Convert milliseconds to minutes

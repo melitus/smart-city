@@ -12,7 +12,7 @@ const headerStyle = {
 const adjustColumnWidths = () => {
   const terminalWidth = process.stdout.columns; // Get terminal width
   const maxWidth = Math.floor(terminalWidth / 6); // Maximum width for each column
-  const defaultColumnWidths = [30, 30, 30, 30, 30, 60]; // Default widths
+  const defaultColumnWidths = [30, 25, 15, 45, 30, 60]; // Default widths
 
   // Adjust the column widths dynamically based on available terminal width
   const adjustedWidths = defaultColumnWidths.map((width) => {
@@ -27,7 +27,7 @@ export const dashboardInsight = async (result) => {
 
   // Header definition
   const head = [
-    chalk.blue.bold('_id'),
+    chalk.blue.bold('id'),
     chalk.blue.bold('vehicleId'),
     chalk.blue.bold('type'),
     chalk.blue.bold('detail'),
