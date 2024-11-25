@@ -8,6 +8,8 @@ import {
 import { saveActionableInsight } from "../data-storage-layer";
 import { InsightType } from "../../models/actionableInsight.model";
 import { haversineDistance } from "../../utils/distance";
+import { logError, sendAlert } from "../../utils/monitoring";
+import { validateDataArray } from "../../utils/validation";
 
 // Constants
 const BUS_DELAY_THRESHOLD = 5; // Bus is delayed more than 5 minutes due to weather
@@ -70,68 +72,93 @@ export const processVanDispatchDecision = (
   averagePassengers: number
 ): void => {
   console.log("Processing Van Dispatch Decision");
-  console.log({ vanData, busData, passengerData, averagePassengers });
 
   // Maintain a set of assigned van IDs
   const assignedVans = new Set<string>();
 
-  passengerData.forEach((passenger) => {
-    console.log("Checking passenger at:", passenger.lat, passenger.lon);
+  try {
+    validateDataArray(vanData, "Van data");
+    validateDataArray(busData, "Bus data");
+    validateDataArray(passengerData, "Passenger data");
+    passengerData.forEach((passenger) => {
+      try {
+        console.log("Checking passenger at:", passenger.lat, passenger.lon);
 
-    // Find delayed buses near the passenger's location
-    const delayedBuses = busData.filter(
-      (bus) =>
-        isWithinDistance(bus.lat, bus.lon, passenger.lat, passenger.lon) &&
-        isBusDelayed(bus)
-    );
+        // Find delayed buses near the passenger's location
+        const delayedBuses = busData.filter(
+          (bus) =>
+            isWithinDistance(bus.lat, bus.lon, passenger.lat, passenger.lon) &&
+            isBusDelayed(bus)
+        );
 
-    console.log("Delayed Buses:", delayedBuses);
+        console.log("Delayed Buses:", delayedBuses);
 
-    if (
-      delayedBuses.length > 0 &&
-      exceedsPassengerThreshold(passenger.passengers, averagePassengers)
-    ) {
-      // Iterate through all vans to find the closest unassigned one within the distance
-      for (const van of vanData) {
         if (
-          isWithinDistance(van.lat, van.lon, passenger.lat, passenger.lon) &&
-          !assignedVans.has(van.van_id) // this ensure that only assigned Vans are considered to be dispatched
+          delayedBuses.length > 0 &&
+          exceedsPassengerThreshold(passenger.passengers, averagePassengers)
         ) {
-          console.log("Available Van:", van);
+          // Iterate through vans to find the closest unassigned one
+          for (const van of vanData) {
+            if (
+              isWithinDistance(
+                van.lat,
+                van.lon,
+                passenger.lat,
+                passenger.lon
+              ) &&
+              !assignedVans.has(van.van_id)
+            ) {
+              console.log("Available Van:", van);
 
-          // Mark the van as assigned
-          assignedVans.add(van.van_id);
-          // Create a van request with the current van's ID
-          const vanRequest: VanRequest = {
-            vehicleId: van.van_id, // Dynamically update with the current van ID
-            location: `(${passenger.lat}, ${passenger.lon})`,
-            passengers: passenger.passengers,
-            reason: "Next bus delayed and passengers exceed threshold",
-            timestamp: passenger.timestamp,
-          };
+              // Mark the van as assigned
+              assignedVans.add(van.van_id);
 
-          console.log("Van requested:", vanRequest);
+              // Create a van request
+              const vanRequest: VanRequest = {
+                vehicleId: van.van_id,
+                location: `(${passenger.lat}, ${passenger.lon})`,
+                passengers: passenger.passengers,
+                reason: "Next bus delayed and passengers exceed threshold",
+                timestamp: passenger.timestamp,
+              };
 
-          // Save the actionable insight
-          saveActionableInsight({
-            vehicleId: `${vanRequest.vehicleId}`,
-            type: InsightType.VAN_NEEDED,
-            detail: `Van needed at ${vanRequest.location} for ${vanRequest.passengers} passengers`,
-            location: vanRequest.location,
-            timestamp: vanRequest.timestamp,
-          });
+              console.log("Van requested:", vanRequest);
 
-          // Exit the loop after dispatching the first available van
-          break;
+              // Save actionable insight
+              saveActionableInsight({
+                vehicleId: `${vanRequest.vehicleId}`,
+                type: InsightType.VAN_NEEDED,
+                detail: `Van needed at ${vanRequest.location} for ${vanRequest.passengers} passengers`,
+                location: vanRequest.location,
+                timestamp: vanRequest.timestamp,
+              });
+
+              // Exit loop after dispatching the first available van
+              break;
+            }
+          }
+
+          if (
+            !Array.from(assignedVans).includes(passenger.passengers.toString())
+          ) {
+            console.log(
+              "No unassigned van found within range for passenger at:",
+              passenger.lat,
+              passenger.lon
+            );
+          }
         }
+      } catch (passengerError) {
+        logError(
+          `Error processing passenger at (${passenger.lat}, ${passenger.lon}): ${passengerError.message}`,
+          passengerError
+        );
+        // Optionally: Skip this passenger and continue processing others
       }
-
-      // Log if no van was available within the required radius
-      console.log(
-        "No available van found for passenger at:",
-        passenger.lat,
-        passenger.lon
-      );
-    }
-  });
+    });
+  } catch (error) {
+    logError(`Critical error in van dispatch process: ${error.message}`, error);
+    sendAlert(`Van Dispatch Error: ${error.message}`);
+    throw new Error("Van Dispatch process aborted due to critical error.");
+  }
 };

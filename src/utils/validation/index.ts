@@ -1,5 +1,4 @@
-// Handles high-velocity data streams, validates incoming data, and enqueues them into kafka Streams.
-
+// This ensure data quality by filtering out incomplete or malformed data.
 import * as fs from 'fs';
 import { parse } from 'csv-parse';
 import Ajv from 'ajv';
@@ -113,4 +112,16 @@ export const loadValidatedJSON = async <T>(
   });
 
   return {rawData, allValid}; // Return true if all records are valid, false otherwise
+};
+
+/**
+ * Validates if the input data array is valid.
+ * @param data - The data array to validate
+ * @param name - The name of the data (for error messages)
+ * @throws Error if the data is missing, not an array, or empty
+ */
+export const validateDataArray = (data: any[], name: string): void => {
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    throw new Error(`${name} is missing or invalid.`);
+  }
 };
