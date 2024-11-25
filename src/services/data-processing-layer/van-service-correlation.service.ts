@@ -1,5 +1,10 @@
 import { calculateDelayInMinutes } from "../../utils";
-import { BusLocationSchema, PassengerWaitingDataSchema, VanLocationSchema, VanRequest } from "../../models";
+import {
+  BusLocationSchema,
+  PassengerWaitingDataSchema,
+  VanLocationSchema,
+  VanRequest,
+} from "../../models";
 import { saveActionableInsight } from "../data-storage-layer";
 import { InsightType } from "../../models/actionableInsight.model";
 import { haversineDistance } from "../../utils/distance";
@@ -9,8 +14,6 @@ const BUS_DELAY_THRESHOLD = 5; // Bus is delayed more than 5 minutes due to weat
 const PASSENGER_THRESHOLD_FACTOR = 0.5; // Dispatch a van if more than 50% passengers at the station
 const VAN_PICKUP_RADIUS = 10; // Van pickup radius in kilometers
 
-
-
 /**
  * Checks if two points are within a specified distance.
  * @param lat1 - Latitude of the first point
@@ -19,9 +22,15 @@ const VAN_PICKUP_RADIUS = 10; // Van pickup radius in kilometers
  * @param lon2 - Longitude of the second point
  * @param maxDistance - Maximum distance in kilometers
  */
-const isWithinDistance = (lat1: number, lon1: number, lat2: number, lon2: number, maxDistance: number = VAN_PICKUP_RADIUS): boolean => {
+const isWithinDistance = (
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+  maxDistance: number = VAN_PICKUP_RADIUS
+): boolean => {
   const distance = haversineDistance(lat1, lon1, lat2, lon2);
-  console.log({distance})
+  console.log({ distance });
   return distance <= maxDistance; // Check if the distance is within the maximum allowed distance (in kilometers)
 };
 
@@ -31,7 +40,7 @@ const isWithinDistance = (lat1: number, lon1: number, lat2: number, lon2: number
  */
 export const isBusDelayed = (bus: BusLocationSchema): boolean => {
   const delay = calculateDelayInMinutes(bus.timestamp);
-  console.log('Bus Delay:', delay);
+  console.log("Bus Delay:", delay);
   return delay > BUS_DELAY_THRESHOLD;
 };
 
@@ -60,14 +69,14 @@ export const processVanDispatchDecision = (
   passengerData: PassengerWaitingDataSchema[],
   averagePassengers: number
 ): void => {
-  console.log('Processing Van Dispatch Decision');
+  console.log("Processing Van Dispatch Decision");
   console.log({ vanData, busData, passengerData, averagePassengers });
 
-   // Maintain a set of assigned van IDs
-   const assignedVans = new Set<string>();
-   
+  // Maintain a set of assigned van IDs
+  const assignedVans = new Set<string>();
+
   passengerData.forEach((passenger) => {
-    console.log('Checking passenger at:', passenger.lat, passenger.lon);
+    console.log("Checking passenger at:", passenger.lat, passenger.lon);
 
     // Find delayed buses near the passenger's location
     const delayedBuses = busData.filter(
@@ -76,21 +85,20 @@ export const processVanDispatchDecision = (
         isBusDelayed(bus)
     );
 
-    console.log('Delayed Buses:', delayedBuses);
+    console.log("Delayed Buses:", delayedBuses);
 
     if (
       delayedBuses.length > 0 &&
       exceedsPassengerThreshold(passenger.passengers, averagePassengers)
     ) {
-      // Iterate through all vans to find the closest one within the distance
-       // Iterate through all vans to find the closest unassigned one within the distance
-       for (const van of vanData) {
+      // Iterate through all vans to find the closest unassigned one within the distance
+      for (const van of vanData) {
         if (
           isWithinDistance(van.lat, van.lon, passenger.lat, passenger.lon) &&
-          !assignedVans.has(van.van_id)
+          !assignedVans.has(van.van_id) // this ensure that only assigned Vans are considered to be dispatched
         ) {
-          console.log('Available Van:', van);
-          
+          console.log("Available Van:", van);
+
           // Mark the van as assigned
           assignedVans.add(van.van_id);
           // Create a van request with the current van's ID
@@ -102,7 +110,7 @@ export const processVanDispatchDecision = (
             timestamp: passenger.timestamp,
           };
 
-          console.log('Van requested:', vanRequest);
+          console.log("Van requested:", vanRequest);
 
           // Save the actionable insight
           saveActionableInsight({
@@ -119,7 +127,11 @@ export const processVanDispatchDecision = (
       }
 
       // Log if no van was available within the required radius
-      console.log('No available van found for passenger at:', passenger.lat, passenger.lon);
+      console.log(
+        "No available van found for passenger at:",
+        passenger.lat,
+        passenger.lon
+      );
     }
   });
 };

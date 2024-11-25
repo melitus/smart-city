@@ -7,7 +7,7 @@ import {
   processVanDispatchDecision,
 } from "../../../services/data-processing-layer";
 import { createTopics } from "../topics";
-import { connectMongoWithRetry } from "../../../utils/datastore";
+import { connectMongoWithRetry } from "../../../utils/database";
 export const registerAllConsumersListeners = async () => {
   // Create topics if they don't exist
   await connectMongoWithRetry();

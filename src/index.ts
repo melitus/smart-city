@@ -11,7 +11,7 @@ import passengerWaitingRoutes from './routes/passengerWaiting.route';
 import insightRouter from './routes/insights.route'
 import { loadValidatedJSON, readCsvFile } from "./utils/validation";
 import { PassengerWaitingDataSchema } from "./models";
-import { connectMongoWithRetry } from "./utils/datastore";
+import { connectMongoWithRetry } from "./utils/database";
 import { dashboardInsight } from "./utils/table";
 
 // Initialize Express app
@@ -58,9 +58,9 @@ const  startDataProcessingSystemConsoleApp = () => {
   console.log(chalk.green.bold("Functions to call:"));
   console.log(chalk.green.bold("1: Data-injection: Ingest the bus location data "));
   console.log(chalk.green.bold("2:  Data-injection: Ingest the passenger waiting location data "));
-  console.log(chalk.green.bold("3:  Data-injection: Ingest the weather updates data "));
-  console.log(chalk.green.bold("4:  Data-injection: Ingest the van location data "));
-  console.log(chalk.green.bold("5:  Data-Insight: call the data insight api "));
+  console.log(chalk.green.bold("3:  Data-injection: Ingest the van location data "));
+  console.log(chalk.green.bold("4:  Data-injection: Ingest the weather updates data "));
+  console.log(chalk.green.bold("5:  Data-Insight: call the data insight api"));
   console.log(
     chalk.green.bold(
       'Please enter the number of the task you want to perform or enter "exit" to quit.'
@@ -80,14 +80,14 @@ const  startDataProcessingSystemConsoleApp = () => {
         console.log(passengerData);
         break;
       case "3":
-        const weatherInput = await loadValidatedJSON("weather-updates", "weather");
-        const weatherData = await fetchData("POST","/api/weather-updates", weatherInput.rawData )
-        console.log(weatherData);
-        break;
-      case "4":
         const vanInput = await loadValidatedJSON("van-location", "van");
         const vanLocationData = await fetchData("POST","/api/van-location", vanInput.rawData)
         console.log(vanLocationData);
+        break;
+      case "4":
+        const weatherInput = await loadValidatedJSON("weather-updates", "weather");
+        const weatherData = await fetchData("POST","/api/weather-updates", weatherInput.rawData )
+        console.log(weatherData);
         break;
       case "5":
         const insightData = await fetchData("GET","/api/dashboard/insights")

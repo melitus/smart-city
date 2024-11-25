@@ -84,26 +84,14 @@ Design and development of a simplified version of a data integration framework f
 - MongoDB
 
 
-
-
-### Data models gotten from this endpoint:
-- https://cdn.recapture.io/coding-task/demo-carts.json
-- https://cdn.recapture.io/coding-task/demo-orders.json
-
-
  ## Set Up
 
 The easiest way to get started is to clone the repository:
 
-# Unzip the file
-```
-and copy file to any location
-```
-
 # Change directory
 
 ```
-open in any coding editor of your choice and cd recapture-coding-challenge
+open in any coding editor of your choice and cd smart city
 ```
 
 # Install NPM dependencies
@@ -112,26 +100,37 @@ open in any coding editor of your choice and cd recapture-coding-challenge
 yarn install or npm install
 ```
 
-# start the server 
+# start the data ingestion server 
 
 ```
 yarn run dev or npm run dev
 ```
 
-# # start the server when the project is build
+# To run the data processing server
 
 ```
-yarn run start or npm run start
+Ensure that docker-compose is installed on your system, if yes
+```
+# Run docker-compose
+
+```
+sudo docker-compose up or docker-compose up 
+```
+depending on your setup
+
+# run the processing serve. Still in the smart city root directory
+
+```
+yarn run kafka or npm run kafka
 ```
 
+## Follow the prompt on the console to ingest data in the kafka engine
 
-## Follow the prompt on the console
-
-- Enter "1" to run the Abandoned cart rate
-- Enter "2" to run the Average order value
-- Enter "3" to run the Top products purchased
-- Enter "4" to run the Top products abandoned
-- Enter "5" to run the Breakdown of orders/sales per day
+- Enter "1" to ingest Bus Location
+- Enter "2" to ingest the Passenger waiting location
+- Enter "3" to ingest the Van Location data
+- Enter "4" to ingest the Weather updates data
+- Enter "5" to run the Dashboard insights 
 
 
 ## Reference
