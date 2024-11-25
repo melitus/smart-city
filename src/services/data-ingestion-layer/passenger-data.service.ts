@@ -2,6 +2,7 @@ import createError from "http-errors";
 import { passengerWaitingDataPublisherEvent } from "../../message-broker/kafka/producers";
 import { PassengerWaitingDataSchema } from "../../models";
 import { logError, sendAlert } from "../../utils/monitoring";
+import { validateDataArray } from "../../utils/validation";
 
 /**
  * Publishes passenger waiting data to a Kafka topic with error handling.
@@ -10,12 +11,7 @@ import { logError, sendAlert } from "../../utils/monitoring";
 export const ingestPassengerData = async (passengerData: PassengerWaitingDataSchema[]) => {
   try {
     // Validate input data
-    if (!Array.isArray(passengerData) || passengerData.length === 0) {
-      const validationError = createError(400, "Invalid or empty passenger data provided");
-      logError(`Critical error in passenger data ingestion: ${validationError.message}`, validationError);
-      sendAlert(`Passenger Data Error: ${validationError.message}`);
-      throw validationError;
-    }
+    validateDataArray(passengerData, "Passenger data");
 
     console.log("Publishing passenger data to Kafka:", passengerData);
 

@@ -2,6 +2,7 @@ import createError from "http-errors";
 import { busLocationDataPublisherEvent } from "../../message-broker/kafka/producers";
 import { BusLocationSchema } from "../../models";
 import { logError, sendAlert } from "../../utils/monitoring";
+import { validateDataArray } from "../../utils/validation";
 
 /**
  * Publishes bus location data to a Kafka topic with error handling.
@@ -10,12 +11,7 @@ import { logError, sendAlert } from "../../utils/monitoring";
 export const ingestBusData = async (busData: BusLocationSchema[]) => {
   try {
     // Validate input data
-    if (!Array.isArray(busData) || busData.length === 0) {
-      const validationError = createError(400, "Invalid or empty bus data provided");
-      logError(`Critical error in bus data ingestion: ${validationError.message}`, validationError);
-      sendAlert(`Bus Data Error: ${validationError.message}`);
-      throw validationError;
-    }
+    validateDataArray(busData, "Bus data");
 
     console.log("Publishing bus data to Kafka:", busData);
 

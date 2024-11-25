@@ -2,6 +2,7 @@ import createError from "http-errors";
 import { vanLocationDataPublisherEvent } from "../../message-broker/kafka/producers";
 import { VanLocationSchema } from "../../models";
 import { logError, sendAlert } from "../../utils/monitoring";
+import { validateDataArray } from "../../utils/validation";
 
 /**
  * Publishes van location data to a Kafka topic with error handling.
@@ -10,12 +11,7 @@ import { logError, sendAlert } from "../../utils/monitoring";
 export const ingestVanData = async (vanData: VanLocationSchema[]) => {
   try {
     // Validate input data
-    if (!Array.isArray(vanData) || vanData.length === 0) {
-      const validationError = createError(400, "Invalid or empty van data provided");
-      logError(`Critical error in van data ingestion: ${validationError.message}`, validationError);
-      sendAlert(`Van Data Error: ${validationError.message}`);
-      throw validationError;
-    }
+    validateDataArray(vanData, "Van data");
 
     console.log("Publishing van data to Kafka:", vanData);
 

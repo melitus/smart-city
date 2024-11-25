@@ -2,6 +2,7 @@ import createError from "http-errors";
 import { weatherUpdatesPublisherEvent } from "../../message-broker/kafka/producers";
 import { WeatherUpdateSchema } from "../../models";
 import { logError, sendAlert } from "../../utils/monitoring";
+import { validateDataArray } from "../../utils/validation";
 
 /**
  * Publishes weather data to a Kafka topic with error handling.
@@ -10,12 +11,7 @@ import { logError, sendAlert } from "../../utils/monitoring";
 export const ingestWeatherData = async (weatherData: WeatherUpdateSchema[]) => {
   try {
     // Validate input data
-    if (!Array.isArray(weatherData) || weatherData.length === 0) {
-      const validationError = createError(400, "Invalid or empty weather data provided");
-      logError(`Critical error in weather data ingestion: ${validationError.message}`, validationError);
-      sendAlert(`Weather Data Error: ${validationError.message}`);
-      throw validationError;
-    }
+    validateDataArray(weatherData, "weather data");
 
     console.log("Publishing weather data to Kafka:", weatherData);
 
