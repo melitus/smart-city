@@ -1,6 +1,8 @@
 # A mini data processing system for real-time data integration and analytics within a smart mobility platform
 
-## Objectives
+## System Overview
+
+#### Objectives
 Design and development of a simplified version of a data integration framework for a smart mobility platform. The system will process mobility data streams (e.g., bus location, van location, weather updates, and the number of waiting passengers at a bus stop) in real-time and generate actionable insights.
 - Data Sources:
 
