@@ -68,30 +68,6 @@ Design and development of a simplified version of a data integration framework f
 - User Story 6: As a data analyst, I want to store data to perform historical analysis and replay data streams for 
 debugging or testing.
 
-2. Functional Modules and Components
-- Data Ingestion Layer
-   - Bus Data Ingestion: Captures real-time bus location and status data.
-   - Van Data Ingestion: Captures real-time van location and status data.
-   - Weather Data Ingestion: Captures real-time weather updates.
-   - Passenger Data Ingestion: Captures passenger count and location data
-
-- Data Processing Layer
-
-  - Real-Time Correlation Engine: Correlates bus delays with weather conditions and passenger count to generate actionable insights.
-  - Van Dispatch Decision Engine: Based on predefined rules (e.g., bus delay threshold, passenger count), decides when a van should be dispatched.
-  - Data Aggregation: Aggregates incoming data for dashboard visualization and API access.
-
-- Dashboard/API Layer
-   - API Endpoint: Exposes a RESTful API for external systems to query data and insights.
-   - Real-Time Dashboard: Displays real-time data and insights (bus delays, van requests) for operators and analysts.
-
-- Message Broker Layer (Kafka)
-   - Producers: Publish real-time data (bus, van, weather, passenger data) to Kafka topics.
-   - Consumers: Process data from Kafka topics, trigger actions (e.g., van dispatch, real-time correlation).
-
-- Storage Layer
-  - Database (MongoDB): Stores historical data for replay and analytics.
-
 #### Non-Functional Requirements
 - Handle high-velocity data streams efficiently.
 - Ensure data quality by filtering out incomplete or malformed data.
@@ -124,7 +100,7 @@ debugging or testing.
 - Storage Layer:
 
     - Maintains historical data for analytics and replaying streams.
-    - Uses MongoDB to supports indexing efficient querying of recent data as well as historical data over time.
+    - The system used MongoDB to supports indexing efficient querying of recent data as well as historical data over time.
 
 - Message Broker:
 
@@ -140,7 +116,7 @@ debugging or testing.
 ## Steps/Interactions for the sequence diagram:
 
 - Data Sources (Bus, Van, Weather, Passenger) send raw data to the Data Ingestion Layer.
-     - Message: Data (e.g., bus location, van location, weather data, passenger info)
+     - Message: Sample Data was provided expect passenger which was generated based on assumption (e.g., bus location, van location, weather data, passenger info)
 
 - The Data Ingestion Layer filters and validates the incoming data (checks schema, missing values, etc.).
      - Message: Validated Data (Bus Location, Van Location, Weather Data, Passenger Data)
@@ -179,6 +155,7 @@ debugging or testing.
 - Integration websocket support can help the system streams insights to dashboards without overwhelming backend services.
 - Having a monitoring system that can track system performance metrics such as throughput, latency, and resource usage.
 - Integration Elasticsearch can help in searching and retrieving data in real-time, which is essential for actionable insights and dashboards.
+
 ## Default Technologies:
 
 - Typescript
@@ -201,7 +178,20 @@ The easiest way to get started is to clone the repository:
 ```
 open in any coding editor of your choice and cd smart city
 ```
+# Create environment variable file called ".env" in the root directory and paste 
+```
+ENVIRONMENT = development
+PORT=4004
 
+#Kafka broker
+KAFKA_GROUP_ID="real-time-processing"
+KAFKA_CLIENT_ID="data-processing"
+KAFKA_BROKERS=localhost:29092
+
+#dev Database
+MONGO_URI=xxxxxxxx is mongodb connection url from mongodb atlas or localhost
+
+```
 # Install NPM dependencies
 
 ```
