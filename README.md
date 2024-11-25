@@ -100,6 +100,10 @@ debugging or testing.
 # System Architecture
 
 ## High-Level Architecture
+#### HIgh Level Diagram with C4 Model
+
+![Alt text](./diagrams/smartcityhighlevel.jpg?raw=true "Smart City")
+
 #### Components
 - Data Ingestion Layer:
     - Handles high-velocity data streams (Bus, Van, Weather) and batch data (Passenger).
@@ -127,6 +131,7 @@ debugging or testing.
     - Manages communication between components for scalability and fault tolerance with Kafka
     - This is separated into consumers and producers
     - Different topics are defined for different events trigger
+
 
 ## Sequence Diagram
 
