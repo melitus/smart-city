@@ -1,6 +1,7 @@
 import createError from "http-errors";
 import { busLocationDataPublisherEvent } from "../../message-broker/kafka/producers";
 import { BusLocationSchema } from "../../models";
+import { logError, sendAlert } from "../../utils/monitoring";
 
 /**
  * Publishes bus location data to a Kafka topic with error handling.
@@ -11,7 +12,8 @@ export const ingestBusData = async (busData: BusLocationSchema[]) => {
     // Validate input data
     if (!Array.isArray(busData) || busData.length === 0) {
       const validationError = createError(400, "Invalid or empty bus data provided");
-      console.error(validationError.message);
+      logError(`Critical error in bus data ingestion: ${validationError.message}`, validationError);
+      sendAlert(`Bus Data Error: ${validationError.message}`);
       throw validationError;
     }
 
@@ -23,19 +25,22 @@ export const ingestBusData = async (busData: BusLocationSchema[]) => {
     console.log("Successfully published bus data.");
   } catch (error: any) {
     // Log the error details
-    console.error("Error during bus data ingestion:", error.message, error.stack);
+    logError(`Critical error in bus data ingestion: ${error.message}`, error);
+    sendAlert(`Bus Data Error: ${error.message}`);
 
     // Categorize and handle specific errors
     if (error.name === "KafkaError") {
       const kafkaError = createError(502, "Failed to publish bus data to Kafka");
-      console.error(kafkaError.message);
+      logError(`Critical error in Kafka publishing: ${kafkaError.message}`, kafkaError);
+      sendAlert(`Kafka Error: ${kafkaError.message}`);
       throw kafkaError;
     } else if (error.statusCode === 400) {
       console.error("Bad Request:", error.message);
       throw error; // Re-throw client-side errors
     } else {
-      const serverError = createError(500, "Internal server error during data ingestion");
-      console.error(serverError.message);
+      const serverError = createError(500, "Internal server error during bus data ingestion");
+      logError(`Critical error in bus data ingestion: ${serverError.message}`, serverError);
+      sendAlert(`Server Error: ${serverError.message}`);
       throw serverError;
     }
   }
