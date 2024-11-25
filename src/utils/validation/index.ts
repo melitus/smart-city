@@ -4,6 +4,8 @@ import { parse } from 'csv-parse';
 import Ajv from 'ajv';
 import path from 'path';
 import { PassengerWaitingDataSchema } from '../../models';
+import createError from "http-errors";
+import { logError, sendAlert } from "../../utils/monitoring";
 
 // JSON Schema Validator
 const ajv = new Ajv();
@@ -115,13 +117,17 @@ export const loadValidatedJSON = async <T>(
 };
 
 /**
- * Validates if the input data array is valid.
- * @param data - The data array to validate
- * @param name - The name of the data (for error messages)
- * @throws Error if the data is missing, not an array, or empty
+ * Helper function to validate the data array and ensure it is not empty.
+ * Logs error and sends an alert if validation fails.
+ * @param data - The data to validate
+ * @param dataName - The name of the data being validated (for error messages)
+ * @throws - Throws a validation error if validation fails
  */
-export const validateDataArray = (data: any[], name: string): void => {
-  if (!data || !Array.isArray(data) || data.length === 0) {
-    throw new Error(`${name} is missing or invalid.`);
+export const validateDataArray = (data: any[], dataName: string): void => {
+  if (!Array.isArray(data) || data.length === 0) {
+    const validationError = createError(400, `${dataName} is invalid or empty`);
+    logError(`Critical error in ${dataName} ingestion: ${validationError.message}`, validationError);
+    sendAlert(`${dataName} Error: ${validationError.message}`);
+    throw validationError;
   }
 };
