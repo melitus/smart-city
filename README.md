@@ -1,4 +1,4 @@
-# A mini data processing system for real-time data integration and analytics within a smart mobility platform
+# Real-Time Data Processing and Insight Generation System
 
 ## System Overview
 
