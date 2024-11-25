@@ -173,12 +173,12 @@ debugging or testing.
 
 The easiest way to get started is to clone the repository:
 
-# Change directory
+#### Change directory
 
 ```
 open in any coding editor of your choice and cd smart city
 ```
-# Create environment variable file called ".env" in the root directory and paste 
+#### Create environment variable file called ".env" in the root directory and paste 
 ```
 ENVIRONMENT = development
 PORT=4004
@@ -192,37 +192,37 @@ KAFKA_BROKERS=localhost:29092
 MONGO_URI=xxxxxxxx is mongodb connection url from mongodb atlas or localhost
 
 ```
-# Install NPM dependencies
+#### Install NPM dependencies
 
 ```
 yarn install or npm install
 ```
 
-# start the data ingestion server 
+#### start the data ingestion server 
 
 ```
 yarn run dev or npm run dev
 ```
 
-# To run the data processing server
+#### To run the data processing server
 
 ```
 Ensure that docker-compose is installed on your system, if yes
 ```
-# Run docker-compose
+#### Run docker-compose
 
 ```
 sudo docker-compose up or docker-compose up 
 ```
 depending on your setup
 
-# run the processing server. Still in the smart city root directory
+#### run the processing server. Still in the smart city root directory
 
 ```
 yarn run kafka or npm run kafka
 ```
 
-## Follow the prompt on the console to ingest data in the kafka engine
+### Follow the prompt on the console to ingest data in the kafka engine
 
 - Enter "1" to ingest Bus Location
 - Enter "2" to ingest the Passenger waiting location
@@ -232,6 +232,4 @@ yarn run kafka or npm run kafka
 
 
 ## Reference
-- https://www.bigcommerce.com/articles/ecommerce/abandoned-carts/
-- https://www.bigcommerce.com/articles/ecommerce/average-order-value/
-- https://www.shopify.com/ng/blog/average-order-value
+- 
