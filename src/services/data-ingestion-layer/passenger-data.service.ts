@@ -32,7 +32,7 @@ export const ingestPassengerData = async (passengerData: PassengerWaitingDataSch
       throw kafkaError;
     } else if (error.statusCode === 400) {
       console.error("Bad Request:", error.message);
-      throw error; // Re-throw client-side errors
+      throw error;
     } else {
       const serverError = createError(500, "Internal server error during data ingestion");
       logError(`Critical error in passenger data ingestion: ${serverError.message}`, serverError);

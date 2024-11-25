@@ -61,6 +61,10 @@ Design and development of a simplified version of a data integration framework f
     - This is separated into consumers and producers
     - Different topics are defined for different events trigger
 
+## Sequence Diagram
+
+![Alt text](./diagrams/smartcity.jpg?raw=true "Smart City")
+
 ## Real-Time Processing Steps:
 - Bus Location & Weather Data Correlation:
 
@@ -118,7 +122,7 @@ sudo docker-compose up or docker-compose up
 ```
 depending on your setup
 
-# run the processing serve. Still in the smart city root directory
+# run the processing server. Still in the smart city root directory
 
 ```
 yarn run kafka or npm run kafka

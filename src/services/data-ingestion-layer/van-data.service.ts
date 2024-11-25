@@ -32,7 +32,7 @@ export const ingestVanData = async (vanData: VanLocationSchema[]) => {
       throw kafkaError;
     } else if (error.statusCode === 400) {
       console.error("Bad Request:", error.message);
-      throw error; // Re-throw client-side errors
+      throw error; 
     } else {
       const serverError = createError(500, "Internal server error during van data ingestion");
       logError(`Critical error in van data ingestion: ${serverError.message}`, serverError);

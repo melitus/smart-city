@@ -32,7 +32,7 @@ export const ingestBusData = async (busData: BusLocationSchema[]) => {
       throw kafkaError;
     } else if (error.statusCode === 400) {
       console.error("Bad Request:", error.message);
-      throw error; // Re-throw client-side errors
+      throw error; 
     } else {
       const serverError = createError(500, "Internal server error during bus data ingestion");
       logError(`Critical error in bus data ingestion: ${serverError.message}`, serverError);
