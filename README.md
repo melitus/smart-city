@@ -161,6 +161,19 @@ debugging or testing.
 - The Message Broker handles communication between consumers and producers, where additional processing may occur (replaying data, triggering new events).
      - Message: Data Flow between Consumers and Producers
 
+## Challenges faced:
+- Faced problem with the different consumers using the same group id. But after going through kafka documentation,  i got to know that the consumer group should be assigned since they they consume different topics
+- Tried using in-memory storage mechanism but data got flushed when the app restarts. Because of that , I have to switch to MongoDB to maintain the data for the insights generated.
+
+## Systems improvement suggestions:
+- I will suggest horizontal scaling of the kafka cluster for high throughput even during data spikes
+- The processing server can also be scaled horizontally
+- Mongodb should also be scaled horizontally to ensure data stability and uptime
+- For the fetching the insights, it will be great to have something like Redis for caching so that the client doesn't have to does not hit the db every time.
+- Having a cloud native tool like kubernetes or AWS Lambda, or Azure functions can used  to auto-scale compute resources in response to increased workload.
+- Integration websocket support can help the system streams insights to dashboards without overwhelming backend services.
+- Having a monitoring system that can track system performance metrics such as throughput, latency, and resource usage.
+- Integration Elasticsearch can help in searching and retrieving data in real-time, which is essential for actionable insights and dashboards.
 ## Default Technologies:
 
 - Typescript
