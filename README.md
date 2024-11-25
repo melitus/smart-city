@@ -65,15 +65,97 @@ Design and development of a simplified version of a data integration framework f
 
 ![Alt text](./diagrams/smartcity.jpg?raw=true "Smart City")
 
-## Real-Time Processing Steps:
-- Bus Location & Weather Data Correlation:
+## Steps/Interactions for the sequence diagram:
 
-   - If the bus is delayed (based on timestamp), and the delay is caused by adverse weather conditions (e.g., rain, snow), we need to detect this.
+- Data Sources (Bus, Van, Weather, Passenger) send raw data to the Data Ingestion Layer.
+     - Message: Data (e.g., bus location, van location, weather data, passenger info)
 
-- Van Dispatch Decision:
-   - A van is needed when:
-       - The next bus will be delayed by more than 5 minutes.
-       - The number of waiting passengers exceeds 50% of the average number of waiting passengers at the same location and time.
+- The Data Ingestion Layer filters and validates the incoming data (checks schema, missing values, etc.).
+     - Message: Validated Data (Bus Location, Van Location, Weather Data, Passenger Data)
+
+- The Data Ingestion Layer queues the validated data in the Message Broker for further processing.
+   - Message: Enqueue Validated Data (Message Queue)
+
+- The Message Broker (Kafka) sends the data to the Data Processing Layer for real-time processing and correlation.
+   - Message: Process Data (Real-time data streams, Bus-Van correlation, Bus-Weather correlation)
+
+- The Data Processing Layer performs the necessary real-time correlations, applies business rules, and aggregates data for further insights.
+    - Message: Actionable Insights (e.g., Van Dispatch Decisions, Weather Correlation for Bus)
+
+- The Data Processing Layer sends these insights to:
+     - Dashboard/API Layer for real-time data display and API access.
+         - Message: Stream Insights (via WebSocket or REST API)
+    - Storage Layer to persist historical data for analytics.
+         - Message: Store Data (MongoDB for querying)
+
+- The Dashboard/API Layer provides access to external systems or clients (via REST APIs or WebSocket).
+    - Message: Provide Insights to End User (e.g., through a Web Application or Console)
+
+- The Message Broker handles communication between consumers and producers, where additional processing may occur (replaying data, triggering new events).
+     - Message: Data Flow between Consumers and Producers
+
+## Functional Requirements
+1. Use Cases and User Stories
+###### Use Case 1: Data Ingestion
+
+- Description: Ingest real-time and batch data streams from multiple sources (bus, van, weather, passenger data).
+- User Story 1: As a data pipeline user, I want to ingest various data streams (e.g., bus locations, weather updates, passenger data) in real-time so that I can process and correlate data for van dispatch decisions.
+
+###### Use Case 2: Data Validation
+
+- Description: Ensure all incoming data is validated against predefined schemas and business rules before processing.
+- User Story 2: As a system administrator, I want the system to validate incoming data (e.g., bus location, passenger count) to ensure accuracy and avoid processing errors.
+
+###### Use Case 3: Real-Time Data Correlation
+
+- Description: Perform correlations between different data streams (e.g., bus delay, weather conditions, passenger wait time) in real-time for actionable insights.
+- User Story 3: As a system analyst, I want to receive real-time correlations of bus delays, weather conditions, and passenger data to generate actionable insights for van dispatch.
+
+###### Use Case 4: Van Dispatch Decision
+
+- Description: Automatically trigger van dispatch based on bus delays, passenger wait times, and available vans.
+- User Story 4: As a system user, I want the system to automatically request a van when bus delays exceed a threshold and there are enough waiting passengers at the station.
+
+###### Use Case 5: Dashboard and API
+
+- Description: Provide a dashboard and API for external systems to access real-time insights and historical data.
+- User Story 5: As a user, I want to visualize the real-time bus, van, and passenger data on a dashboard and access these insights via an API.
+
+###### Use Case 6: Data Storage and Replay
+
+- Description: Store historical data for analytics and allow replaying data streams to simulate conditions.
+- User Story 6: As a data analyst, I want to store data to perform historical analysis and replay data streams for 
+debugging or testing.
+
+2. Functional Modules and Components
+- Data Ingestion Layer
+   - Bus Data Ingestion: Captures real-time bus location and status data.
+   - Van Data Ingestion: Captures real-time van location and status data.
+   - Weather Data Ingestion: Captures real-time weather updates.
+   - Passenger Data Ingestion: Captures passenger count and location data
+
+- Data Processing Layer
+
+  - Real-Time Correlation Engine: Correlates bus delays with weather conditions and passenger count to generate actionable insights.
+  - Van Dispatch Decision Engine: Based on predefined rules (e.g., bus delay threshold, passenger count), decides when a van should be dispatched.
+  - Data Aggregation: Aggregates incoming data for dashboard visualization and API access.
+
+- Dashboard/API Layer
+   - API Endpoint: Exposes a RESTful API for external systems to query data and insights.
+   - Real-Time Dashboard: Displays real-time data and insights (bus delays, van requests) for operators and analysts.
+
+- Message Broker Layer (Kafka)
+   - Producers: Publish real-time data (bus, van, weather, passenger data) to Kafka topics.
+   - Consumers: Process data from Kafka topics, trigger actions (e.g., van dispatch, real-time correlation).
+
+- Storage Layer
+  - Database (MongoDB): Stores historical data for replay and analytics.
+
+## Non-Functional Requirements
+- Handle high-velocity data streams efficiently.
+- Ensure data quality by filtering out incomplete or malformed data.
+- Provide meaningful error-handling for failed data ingestion or processing.
+
 
 ## Default Technologies:
 
