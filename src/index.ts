@@ -17,7 +17,7 @@ import config from "./config";
 
 // Initialize Express app
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(bodyParser.json())
 // Use the imported routes
@@ -33,8 +33,8 @@ const realTimeDataStreamingConsoleInterface = readline.createInterface({
 });
 
 async function fetchData(method: Method, endpoint: string, data?: any) {
-  const url = `http://localhost:${port}${endpoint}`;
-  console.log(`Fetching data, data: ${data}`);
+  const url = `http://localhost:${config.appKey.port}${endpoint}`;
+  console.log(`Fetching data, data: ${url}`);
   try {
 
     const response = await axios({

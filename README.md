@@ -181,7 +181,7 @@ open in any coding editor of your choice and cd smart city
 #### Create environment variable file called ".env" in the root directory and paste 
 ```
 ENVIRONMENT = development
-PORT=4004
+PORT=3000
 
 #Kafka broker
 KAFKA_GROUP_ID="real-time-processing"
@@ -238,6 +238,8 @@ yarn run kafka or npm run kafka
 - Enter "4" to ingest the Weather updates data
 - Enter "5" to run the Dashboard insights 
 
+##### Dashboard Insights
+![Alt text](./diagrams/dashboard.png?raw=true "Data ingest server")
 
 ## Reference
 - https://www.amazon.com/Designing-Data-Intensive-Applications-Reliable-Maintainable/dp/1449373321

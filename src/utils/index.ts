@@ -10,9 +10,6 @@ export const calculateDelayInMinutes = (timestamp: string): number => {
   return (currentTime - eventTime) / 60000; // Convert milliseconds to minutes
 };
 
-
-const isNumber = (value) => !isNaN(parseFloat(value)) && isFinite(value);
-
 export const isUndefined = (obj: any): obj is undefined => typeof obj === 'undefined';
 
 
