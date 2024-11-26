@@ -155,6 +155,11 @@ debugging or testing.
 - Integration websocket support can help the system streams insights to dashboards without overwhelming backend services.
 - Having a monitoring system that can track system performance metrics such as throughput, latency, and resource usage.
 - Integration Elasticsearch can help in searching and retrieving data in real-time, which is essential for actionable insights and dashboards.
+- Using Apache Spark for streaming bulk operations in real time and  analyze the data and generate reports.
+- Using time-series database (InfluxDB/TimescaleDB) will help to efficiently store and retrieve time-stamped server data.
+
+
+
 
 ## Default Technologies:
 
@@ -247,3 +252,6 @@ yarn run kafka or npm run kafka
 - https://www.amazon.com/Enterprise-Integration-Patterns-Designing-Deploying/dp/0321200683
 - https://www.amazon.com/Software-Architecture-Practice-3rd-Engineering/dp/0321815734
 - https://www.amazon.com/Building-Event-Driven-Microservices-Leveraging-Organizational/dp/1492057894
+- https://selfuel.digital/real-time-data-processing-architecture-designing/
+- https://systemdesignschool.io/problems/realtime-monitoring-system/solution
+- https://subhadipmitra.com/blog/2021/designing-a-real-time-data-processing-system/
