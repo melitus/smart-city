@@ -3,7 +3,7 @@ import { ingestWeatherData } from '../services/data-ingestion-layer';
 
 const weatherRouter = express.Router();
 
-weatherRouter.post('/api/weather-updates', async (req, res) => {
+weatherRouter.post('/weather-updates', async (req, res) => {
   const data: any = req.body;
   if (Array.isArray(data)) {      
   await ingestWeatherData(data)

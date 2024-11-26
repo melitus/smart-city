@@ -2,7 +2,7 @@ import express from 'express';
 import { ingestBusData } from '../services/data-ingestion-layer';
 
 const busRouter = express.Router();
-busRouter.post('/api/bus-location', async (req, res) => {
+busRouter.post('/bus-location', async (req, res) => {
     const data: any = req.body;
     if (Array.isArray(data)) {
       await ingestBusData(data)

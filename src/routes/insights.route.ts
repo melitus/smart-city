@@ -3,7 +3,7 @@ import { getActionableInsights } from '../services/data-storage-layer';
 
 const insightRouter = express.Router();
 
-insightRouter.get('/api/dashboard/insights', async (req, res) => {
+insightRouter.get('/dashboard/insights', async (req, res) => {
     const insights = await getActionableInsights();
     console.log(insights)
     if (insights) {

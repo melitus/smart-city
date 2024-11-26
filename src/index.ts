@@ -4,17 +4,13 @@ import express from 'express';
 import axios, { Method } from 'axios';
 import bodyParser from 'body-parser'
 
-import busLocationRoutes from './routes/busLocation.route';
-import weatherUpdatesRoutes from './routes/weatherUpdates.route';
-import vanLocationRoutes from './routes/vanLocation.route';
-import passengerWaitingRoutes from './routes/passengerWaiting.route';
-import insightRouter from './routes/insights.route'
 import { loadValidatedJSON, readCsvFile } from "./utils/validation";
 import { PassengerWaitingDataSchema } from "./models";
 import { connectMongoWithRetry } from "./utils/database";
 import { dashboardInsight } from "./utils/table";
 import config from "./config";
 import { handleHttpError } from "./utils/monitoring";
+import installApiEndpoints from "./routes"
 
 // Initialize Express app
 const app = express();
@@ -22,11 +18,8 @@ const port = 3001;
 
 app.use(bodyParser.json())
 // Use the imported routes
-app.use(busLocationRoutes);
-app.use(weatherUpdatesRoutes);
-app.use(vanLocationRoutes);
-app.use(passengerWaitingRoutes);
-app.use(insightRouter);
+
+app.use('/api', installApiEndpoints);
 
 const realTimeDataStreamingConsoleInterface = readline.createInterface({
   input: process.stdin,

@@ -5,7 +5,7 @@ import { PassengerWaitingDataSchema } from '../models';
 
 const passengerRouter = express.Router();
 
-passengerRouter.post('/api/passenger-waiting', async (req, res) => {    
+passengerRouter.post('/passenger-waiting', async (req, res) => {    
     const data: any = req.body;
     if (Array.isArray(data)) {      
     await ingestPassengerData(data)
