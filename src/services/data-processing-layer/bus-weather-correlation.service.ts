@@ -40,7 +40,7 @@ export const processBusWeatherCorrelation = (
             weatherAtBusLocation.precipitation === WeatherType.RAIN)
         ) {
           saveActionableInsight({
-            vehicleId: `${bus.bus_id}-${bus.timestamp}`,
+            vehicleId: `${bus.bus_id}`,
             type: InsightType.BUS_DELAY,
             detail: `Bus ${bus.bus_id} delayed due to ${weatherAtBusLocation.precipitation}`,
             location: `(${bus.lat}, ${bus.lon})`,
