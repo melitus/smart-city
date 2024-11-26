@@ -14,6 +14,7 @@ import { PassengerWaitingDataSchema } from "./models";
 import { connectMongoWithRetry } from "./utils/database";
 import { dashboardInsight } from "./utils/table";
 import config from "./config";
+import { handleHttpError } from "./utils/monitoring";
 
 // Initialize Express app
 const app = express();
@@ -46,8 +47,7 @@ async function callApi(method: Method, endpoint: string, data?: any) {
     console.log(chalk.green(`Response from ${url}:`), response.data);
     return response.data;
   } catch (error) {
-    console.error(`Error during ${method} request to ${url}:`, error);
-    // throw error;
+    handleHttpError(error, method, url);
     startDataProcessingSystemConsoleApp()
   }
 }
