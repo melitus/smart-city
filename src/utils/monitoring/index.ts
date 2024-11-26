@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import createError from "http-errors";
 
 export const logError = (message: string, error: Error): void => {
     console.error(chalk.red(`${message}\nStack Trace: ${error.stack}`));
@@ -45,5 +46,32 @@ export const handleHttpError = (error: any, method: string, url: string) => {
     default:
       console.log(chalk.red("Server error. Attempting to recover..."));
       break;
+  }
+};
+
+/**
+ * Handles error logging, alerting, and specific error categorization for passenger data ingestion.
+ * @param error - The error object to handle.
+ * @param context - Contextual information for logging (e.g., "Passenger data ingestion").
+ */
+export const handlePublisherError = (error: any, context: string): never => {
+  // Log the error details and send an alert
+  logError(`Critical error in ${context}: ${error.message}`, error);
+  sendAlert(`${context} Error: ${error.message}`);
+
+  // Categorize and handle specific errors
+  if (error.name === "KafkaError") {
+    const kafkaError = createError(502, `Failed to process ${context} due to Kafka issues`);
+    logError(`Critical error in Kafka operation: ${kafkaError.message}`, kafkaError);
+    sendAlert(`Kafka Error: ${kafkaError.message}`);
+    throw kafkaError;
+  } else if (error.statusCode === 400) {
+    console.error(`Bad Request in ${context}:`, error.message);
+    throw error;
+  } else {
+    const serverError = createError(500, `Internal server error during ${context}`);
+    logError(`Critical error in ${context}: ${serverError.message}`, serverError);
+    sendAlert(`Server Error: ${serverError.message}`);
+    throw serverError;
   }
 };
