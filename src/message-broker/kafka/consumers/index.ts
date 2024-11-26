@@ -28,6 +28,10 @@ export const registerAllConsumersListeners = async () => {
       console.log({currentBusData, currentWeatherData})
       console.log("Processing bus and weather data");
       processBusWeatherCorrelation(currentBusData, currentWeatherData);
+
+       // Clear processed data
+       currentBusData = null;
+       currentWeatherData = null;
     }
 
     if (
@@ -45,6 +49,12 @@ export const registerAllConsumersListeners = async () => {
         currentPassengerData,
         averagePassengers
       );
+
+      // Clear processed data
+      currentVanData = null;
+      currentBusData = null;
+      currentPassengerData = null;
+      averagePassengers = null;
     }
   };
 

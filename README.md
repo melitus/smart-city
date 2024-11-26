@@ -147,6 +147,7 @@ debugging or testing.
 - Tried using in-memory storage mechanism but data got flushed when the app restarts. Because of that , I have to switch to MongoDB to maintain the data for the insights generated.
 - Had challenges with floating-point precision issues as a result of direct comparison of latitude and longitude values. This was solved with proximity checks with Haversine formula.
 - Also faced issues with timestamp exact equality matching which fails if there is a slight difference. It was also solved with  time tolerance +- values
+- I faced challenges with residual data in state variables was causing incorrect or duplicate processing in the kafka consumer listeners registration. The state variables (currentVanData, currentBusData, currentPassengerData, currentWeatherData, and averagePassengers) were being reused inadvertently when new data arrived, as they were not cleared after processing. I have to set them to null after the require operations is completed.
 
 ## Systems improvement suggestions:
 - I will suggest horizontal scaling of the kafka cluster for high throughput even during data spikes
