@@ -32,7 +32,7 @@ const realTimeDataStreamingConsoleInterface = readline.createInterface({
   output: process.stdout,
 });
 
-async function fetchData(method: Method, endpoint: string, data?: any) {
+async function callApi(method: Method, endpoint: string, data?: any) {
   const url = `http://localhost:${config.appKey.port}${endpoint}`;
   console.log(`Fetching data, data: ${url}`);
   try {
@@ -43,7 +43,7 @@ async function fetchData(method: Method, endpoint: string, data?: any) {
       data, // Optional for POST, PUT, PATCH, etc.
     });
 
-    console.log(`Response from ${url}:`, response.data);
+    console.log(chalk.green(`Response from ${url}:`), response.data);
     return response.data;
   } catch (error) {
     console.error(`Error during ${method} request to ${url}:`, error);
@@ -72,26 +72,26 @@ const  startDataProcessingSystemConsoleApp = () => {
     switch (answer) {
       case "1":
         const locationInput = await loadValidatedJSON("bus-location", "bus");
-        const locationData = await fetchData("POST","/api/bus-location" , locationInput.rawData)
+        const locationData = await callApi("POST","/api/bus-location" , locationInput.rawData)
         console.log("Location data: " + locationData)
         break;
       case "2":
         const passengerInput: PassengerWaitingDataSchema | any = await readCsvFile("passenger-waiting")
-        const passengerData = await fetchData("POST","/api/passenger-waiting", passengerInput )
+        const passengerData = await callApi("POST","/api/passenger-waiting", passengerInput )
         console.log(passengerData);
         break;
       case "3":
         const vanInput = await loadValidatedJSON("van-location", "van");
-        const vanLocationData = await fetchData("POST","/api/van-location", vanInput.rawData)
+        const vanLocationData = await callApi("POST","/api/van-location", vanInput.rawData)
         console.log(vanLocationData);
         break;
       case "4":
         const weatherInput = await loadValidatedJSON("weather-updates", "weather");
-        const weatherData = await fetchData("POST","/api/weather-updates", weatherInput.rawData )
+        const weatherData = await callApi("POST","/api/weather-updates", weatherInput.rawData )
         console.log(weatherData);
         break;
       case "5":
-        const insightData = await fetchData("GET","/api/dashboard/insights")
+        const insightData = await callApi("GET","/api/dashboard/insights")
         const dashboardInsightValueTable = await dashboardInsight(
           insightData
         );
