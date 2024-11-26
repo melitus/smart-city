@@ -14,7 +14,7 @@ import { validateDataArray } from "../../utils/validation";
 // Constants
 const BUS_DELAY_THRESHOLD = 5; // Bus is delayed more than 5 minutes due to weather
 const PASSENGER_THRESHOLD_FACTOR = 0.5; // Dispatch a van if more than 50% passengers at the station
-const VAN_PICKUP_RADIUS = 10; // Van pickup radius in kilometers
+const VAN_PICKUP_RADIUS = 4; // Van pickup radius in kilometers
 
 /**
  * Checks if two points are within a specified distance.
