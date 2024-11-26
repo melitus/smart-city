@@ -240,4 +240,8 @@ yarn run kafka or npm run kafka
 
 
 ## Reference
-- 
+- https://www.amazon.com/Designing-Data-Intensive-Applications-Reliable-Maintainable/dp/1449373321
+- https://github.com/tulios/kafkajs/issues/1040
+- https://www.amazon.com/Enterprise-Integration-Patterns-Designing-Deploying/dp/0321200683
+- https://www.amazon.com/Software-Architecture-Practice-3rd-Engineering/dp/0321815734
+- https://www.amazon.com/Building-Event-Driven-Microservices-Leveraging-Organizational/dp/1492057894
