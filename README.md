@@ -250,6 +250,7 @@ yarn run kafka or npm run kafka
 ![Alt text](./diagrams/dashboard.png?raw=true "Data ingest server")
 
 ## Reference
+- https://newsletter.systemdesign.one/p/how-does-uber-find-nearby-drivers
 - https://www.amazon.com/Designing-Data-Intensive-Applications-Reliable-Maintainable/dp/1449373321
 - https://github.com/tulios/kafkajs/issues/1040
 - https://www.amazon.com/Enterprise-Integration-Patterns-Designing-Deploying/dp/0321200683
@@ -258,3 +259,4 @@ yarn run kafka or npm run kafka
 - https://selfuel.digital/real-time-data-processing-architecture-designing/
 - https://systemdesignschool.io/problems/realtime-monitoring-system/solution
 - https://subhadipmitra.com/blog/2021/designing-a-real-time-data-processing-system/
+
