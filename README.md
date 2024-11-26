@@ -145,6 +145,8 @@ debugging or testing.
 ## Challenges faced:
 - Faced problem with the different consumers using the same group id. But after going through kafka documentation,  i got to know that the consumer group should be assigned since they they consume different topics
 - Tried using in-memory storage mechanism but data got flushed when the app restarts. Because of that , I have to switch to MongoDB to maintain the data for the insights generated.
+- Had challenges with floating-point precision issues as a result of direct comparison of latitude and longitude values. This was solved with proximity checks with Haversine formula.
+- Also faced issues with timestamp exact equality matching which fails if there is a slight difference. It was also solved with  time tolerance +- values
 
 ## Systems improvement suggestions:
 - I will suggest horizontal scaling of the kafka cluster for high throughput even during data spikes
