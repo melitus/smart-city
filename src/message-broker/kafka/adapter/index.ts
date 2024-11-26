@@ -361,7 +361,7 @@ export class KafkaBroker {
 
 
   logMessage = (counter, consumerName, topic, partition, message) => {
-    console.log(
+    console.log( chalk.white.bgGreen.bold(
       `received a new message number: ${counter} on ${consumerName}: `,
       {
         topic,
@@ -372,6 +372,6 @@ export class KafkaBroker {
           value: message.value.toString(),
         },
       }
-    );
+    ));
   };
 }

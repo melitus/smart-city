@@ -13,6 +13,7 @@ import { loadValidatedJSON, readCsvFile } from "./utils/validation";
 import { PassengerWaitingDataSchema } from "./models";
 import { connectMongoWithRetry } from "./utils/database";
 import { dashboardInsight } from "./utils/table";
+import config from "./config";
 
 // Initialize Express app
 const app = express();
@@ -115,8 +116,12 @@ const  startDataProcessingSystemConsoleApp = () => {
 // Start the Express server
 const startServer = async () => {
   await connectMongoWithRetry()
-app.listen(port, () => {
-  console.log(chalk.green(`Server is running on http://localhost:${port}`));
+app.listen(config.appKey.port | port, () => {
+console.log(
+  chalk.white.bgGreen.bold(
+    `👂 Mini data processing system server started on port ${config.appKey.port} on (${config.appKey.env}) mode`
+  )
+)
   startDataProcessingSystemConsoleApp(); // Start the console app
 });
 }

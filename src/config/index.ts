@@ -17,10 +17,7 @@ loadenv();
 export default {
   appKey: {
     port: normalizePort(process.env.PORT || getOsEnv('PORT')) as number,
-    env: getOsEnv('ENVIRONMENT') || 'production',
-    isProduction: process.env.ENVIRONMENT === 'production',
-    isTest: process.env.ENVIRONMENT === 'test',
-    isDevelopment: process.env.ENVIRONMENT === 'development',
+    env: getOsEnv('ENVIRONMENT') || 'production'
   },
     mongo: {
       uri: getOsEnv('MONGO_URI'),

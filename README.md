@@ -203,6 +203,8 @@ yarn install or npm install
 ```
 yarn run dev or npm run dev
 ```
+![Alt text](./diagrams/server.png?raw=true "Data ingest server")
+
 
 #### To run the data processing server
 
@@ -216,11 +218,17 @@ sudo docker-compose up or docker-compose up
 ```
 depending on your setup
 
+###### Kafka and zookeeper running
+![Alt text](./diagrams/kafka.png?raw=true "Data ingest server")
+
+
 #### run the processing server. Still in the smart city root directory
 
 ```
 yarn run kafka or npm run kafka
 ```
+###### Data ingestion layer running
+![Alt text](./diagrams/processing.png?raw=true "Data ingest server")
 
 ### Follow the prompt on the console to ingest data in the kafka engine
 
