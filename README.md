@@ -39,32 +39,32 @@ Design and development of a simplified version of a data integration framework f
 1. Use Cases and User Stories
 ###### Use Case 1: Data Ingestion
 
-- Description: Ingest real-time and batch data streams from multiple sources (bus, van, weather, passenger data).
+- Description: This ingest real-time and batch data streams from multiple sources (bus, van, weather, passenger data).
 - User Story 1: As a data pipeline user, I want to ingest various data streams (e.g., bus locations, weather updates, passenger data) in real-time so that I can process and correlate data for van dispatch decisions.
 
 ###### Use Case 2: Data Validation
 
-- Description: Ensure all incoming data is validated against predefined schemas and business rules before processing.
+- Description: THis ensures that all incoming data is validated against predefined schemas and business rules before processing.
 - User Story 2: As a system administrator, I want the system to validate incoming data (e.g., bus location, passenger count) to ensure accuracy and avoid processing errors.
 
 ###### Use Case 3: Real-Time Data Correlation
 
-- Description: Perform correlations between different data streams (e.g., bus delay, weather conditions, passenger wait time) in real-time for actionable insights.
+- Description: This perform correlations between different data streams (e.g., bus delay, weather conditions, passenger wait time) in real-time for actionable insights.
 - User Story 3: As a system analyst, I want to receive real-time correlations of bus delays, weather conditions, and passenger data to generate actionable insights for van dispatch.
 
 ###### Use Case 4: Van Dispatch Decision
 
-- Description: Automatically trigger van dispatch based on bus delays, passenger wait times, and available vans.
+- Description: This automatically trigger van dispatch based on bus delays, passenger wait times, and available vans.
 - User Story 4: As a system user, I want the system to automatically request a van when bus delays exceed a threshold and there are enough waiting passengers at the station.
 
 ###### Use Case 5: Dashboard and API
 
-- Description: Provide a dashboard and API for external systems to access real-time insights and historical data.
+- Description: This provide a dashboard and API for external systems to access real-time insights and historical data.
 - User Story 5: As a user, I want to visualize the real-time bus, van, and passenger data on a dashboard and access these insights via an API.
 
 ###### Use Case 6: Data Storage and Replay
 
-- Description: Store historical data for analytics and allow replaying data streams to simulate conditions.
+- Description: This store historical data for analytics and allow replaying data streams to simulate conditions.
 - User Story 6: As a data analyst, I want to store data to perform historical analysis and replay data streams for 
 debugging or testing.
 
@@ -82,29 +82,29 @@ debugging or testing.
 
 #### Components
 - Data Ingestion Layer:
-    - Handles high-velocity data streams (Bus, Van, Weather) and batch data (Passenger).
-    - Filters and validates incoming data.
+    - This handles high-velocity data streams (Bus, Van, Weather) and batch data (Passenger).
+    - It also filters and validates incoming data.
     - Queues validated data for further processing.
 
 - Data Processing Layer:
 
-    - Performs real-time correlations between data streams.
-    - Implements business rules for actionable insights (e.g., van dispatch decisions and bus weather correlation).
-    - Aggregates data for the dashboard.
+    - This performs real-time correlations between data streams.
+    - It also implements business rules for actionable insights (e.g., van dispatch decisions and bus weather correlation).
+    - Aggregates data that will be saved for the dashboard.
 
 - Dashboard/API Layer:
 
-    - Provides REST APIs for external access.
-    - Streams insights to a real-time dashboard using console interface. Websocket can be used if it is connected to a web application.
+    - It provides REST APIs for external access.
+    - Also streams insights to a real-time dashboard using console interface. Websocket can be used if it is connected to a web application.
 
 - Storage Layer:
 
-    - Maintains historical data for analytics and replaying streams.
+    - This maintains historical data for analytics and replaying streams.
     - The system used MongoDB to supports indexing efficient querying of recent data as well as historical data over time.
 
 - Message Broker:
 
-    - Manages communication between components for scalability and fault tolerance with Kafka
+    - This manages communication between components for scalability and fault tolerance with Kafka
     - This is separated into consumers and producers
     - Different topics are defined for different events trigger
 
@@ -116,7 +116,7 @@ debugging or testing.
 ## Steps/Interactions for the sequence diagram:
 
 - Data Sources (Bus, Van, Weather, Passenger) send raw data to the Data Ingestion Layer.
-     - Message: Sample Data was provided expect passenger which was generated based on assumption (e.g., bus location, van location, weather data, passenger info)
+     - Message: Sample Data was provided except the passenger data which was generated based on assumption (e.g., bus location, van location, weather data, passenger info)
 
 - The Data Ingestion Layer filters and validates the incoming data (checks schema, missing values, etc.).
      - Message: Validated Data (Bus Location, Van Location, Weather Data, Passenger Data)
