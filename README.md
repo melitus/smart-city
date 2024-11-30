@@ -183,6 +183,7 @@ debugging or testing.
 - prerequisite:
     - Nodejs installed - Link to install Nodejs - https://nodejs.org/en/download/package-manager
     - Docker Compose installed - Link to install Docker Compose - https://docs.docker.com/compose/install/
+    
 The easiest way to get started is to clone the repository:
 
 #### Change directory
