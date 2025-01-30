@@ -209,9 +209,9 @@ MONGO_URI=mongodb://root:example@mongo:27017/smartcity?authSource=admin
 #### Run kafka, zookeper and mongodb first before any other services
 
 ```
-sudo docker-compose up kafka zookeeper mongo 
+sudo docker-compose up zookeeper kafka mongo or docker-compose up zookeeper kafka mongo
 ```
-depending on your setup
+depending on your docker setup
 
 ###### Kafka and zookeeper running
 ![Alt text](./diagrams/kafka.png?raw=true "Data ingest server")
@@ -220,7 +220,7 @@ depending on your setup
 #### start the data ingestion server 
 
 ```
-sudo docker-compose run data-ingestion
+sudo docker-compose run data-ingestion or docker-compose run data-ingestion
 
 ```
 
@@ -234,7 +234,8 @@ Ensure that docker-compose is installed on your system, if yes
 ```
 #### run the processing server. Still in the smart city root directory
 ```
-sudo docker-compose up data-processing
+sudo docker-compose up data-processing  or docker-compose up data-processing
+
 ```
 ###### Data ingestion layer running
 ![Alt text](./diagrams/processing.png?raw=true "Data ingest server")
