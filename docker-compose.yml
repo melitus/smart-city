@@ -1,7 +1,20 @@
-version: '3'
+version: "3"
 
 services:
-# Zookeeper service
+  mongo:
+    image: mongo:latest
+    container_name: mongo_db
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - smarty-city
+  # Zookeeper service
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:7.4.4
@@ -10,12 +23,13 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 22181:2181
-
-# Kafkaservice
+    networks:
+      - smarty-city
+  # Kafkaservice
   kafka:
     container_name: kafka
     image: confluentinc/cp-kafka:7.4.4
-# Ensure that the kafka service start after the Zookeeper service started
+    # Ensure that the kafka service start after the Zookeeper service started
     depends_on:
       - zookeeper
     ports:
@@ -27,5 +41,39 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - smarty-city
 
-# PLAINTEXT_HOST://localhost:29092 is used for external access.
+  data-processing:
+    build:
+      context: .
+      dockerfile: Dockerfile.processing
+    container_name: smart-city-data-processing-server
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+      - kafka
+    networks:
+      - smarty-city
+    stdin_open: true   # This allows interactive mode
+    tty: true     
+
+  data-ingestion:
+    build:
+      context: .
+      dockerfile: Dockerfile.ingestion
+    container_name: smart-city-data-ingestion-server
+    env_file:
+      - .env
+    depends_on:
+      - kafka
+    networks:
+      - smarty-city
+
+networks:
+  smarty-city:
+    driver: bridge
+
+volumes:
+  mongo_data:

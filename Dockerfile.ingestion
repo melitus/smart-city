@@ -1,0 +1,39 @@
+# STAGE 1 - Build
+FROM node:16-alpine AS builder
+
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY package.json yarn.lock ./
+RUN yarn install
+
+# Install TypeScript as a dev dependency
+RUN yarn add --dev typescript
+
+# Copy the rest of the project files
+COPY . .
+
+# Copy environment variables
+COPY .env .env
+
+# Compile TypeScript
+RUN npx tsc && yarn copy-files
+
+# STAGE 2 - Final Image
+FROM node:16-alpine AS final
+
+WORKDIR /app
+
+# Copy built files from the builder stage
+COPY --from=builder /app/dist ./dist
+
+# Copy only necessary files for production
+COPY package.json yarn.lock ./
+# Ensure .env is copied
+COPY .env .env  
+
+# Install only production dependencies
+RUN yarn install --production
+
+# Start the application
+CMD ["node", "dist/index.js"]

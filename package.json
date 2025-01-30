@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "nodemon",
     "kafka": "ts-node ./src/message-broker/index.ts",
-    "build": "rimraf ./dist && tsc",
+    "build": "rm -rf ./dist && tsc",
     "copy-files": "cp -r ./src/datastore ./dist/datastore",
     "start": " yarn build && yarn copy-files && node dist/index.js"
   },

@@ -199,23 +199,31 @@ PORT=3000
 #Kafka broker
 KAFKA_GROUP_ID="real-time-processing"
 KAFKA_CLIENT_ID="data-processing"
-KAFKA_BROKERS=localhost:29092
+KAFKA_BROKERS=kafka:9092
 
 #dev Database
-MONGO_URI=xxxxxxxx is mongodb connection url from mongodb atlas or localhost
+MONGO_URI=mongodb://root:example@mongo:27017/smartcity?authSource=admin
 
 ```
-#### Install NPM dependencies
+
+#### Run kafka, zookeper and mongodb first before any other services
 
 ```
-yarn install or npm install
+sudo docker-compose up kafka zookeeper mongo 
 ```
+depending on your setup
+
+###### Kafka and zookeeper running
+![Alt text](./diagrams/kafka.png?raw=true "Data ingest server")
+
 
 #### start the data ingestion server 
 
 ```
-yarn run dev or npm run dev
+sudo docker-compose run data-ingestion
+
 ```
+
 ![Alt text](./diagrams/server.png?raw=true "Data ingest server")
 
 
@@ -224,21 +232,9 @@ yarn run dev or npm run dev
 ```
 Ensure that docker-compose is installed on your system, if yes
 ```
-#### Run docker-compose
-
-```
-sudo docker-compose up or docker-compose up 
-```
-depending on your setup
-
-###### Kafka and zookeeper running
-![Alt text](./diagrams/kafka.png?raw=true "Data ingest server")
-
-
 #### run the processing server. Still in the smart city root directory
-
 ```
-yarn run kafka or npm run kafka
+sudo docker-compose up data-processing
 ```
 ###### Data ingestion layer running
 ![Alt text](./diagrams/processing.png?raw=true "Data ingest server")

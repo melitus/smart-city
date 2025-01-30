@@ -30,8 +30,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*.ts"
-, "../recapture-coding-challenge/ff.ts"  ],
+    "src/**/*.ts" ],
   "exclude": [
     "node_modules"
   ]
